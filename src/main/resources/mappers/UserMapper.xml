@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.UserMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache></cache>
+
+    <!-- 配置了package别名，只需要写类名就可以 -->
+    <resultMap type="User" id="userResultMap" autoMapping="true">
+        <id property="id" column="id"/>
+        <result property="upPath" column="up_path"/>
+    </resultMap>
+
+
+    <select id="selectAll" resultType="User">
+  		select * from user 
+	</select>
+
+    <!--  	<select id="selectUserById" parameterType="int" resultMap="userResultMap">-->
+    <!--  		select * from user <where><if test="id!=null">id=#{id}</if></where>-->
+    <!--  	</select>-->
+
+    <select id="selectByUser" parameterType="User" resultType="User">
+        select * from user
+        <where>
+            <if test="id!=null">and id=#{id}</if>
+            <if test="username!=null">and username=#{username}</if>
+            <if test="password!=null">and password=#{password}</if>
+        </where>
+    </select>
+
+    <!--  <select id="selectLikeUser" resultType="User">
+        select * from user
+        <where>
+            <if test="id!=null">id like CONCAT('%',#{id},'%')</if>
+            <if test="username!=null">and username like CONCAT('%',#{username},'%')</if>
+            <if test="password!=null">and password like CONCAT('%',#{password},'%')</if>
+        </where>
+    </select> -->
+
+    <!-- 模糊查询 -->
+    <!--	<select id="selectLike" resultType="User">-->
+    <!--		select * from user-->
+    <!--		<where>-->
+    <!--			<if test="id!=null">and id like CONCAT('%',#{id},'%')</if>-->
+    <!--			<if test="username!=null">and username like CONCAT('%',#{username},'%')</if>-->
+    <!--			<if test="password!=null">and password like CONCAT('%',#{password},'%')</if>-->
+    <!--		</where>-->
+    <!--	</select>-->
+    <!--  -->
+    <!--  	&lt;!&ndash; 连接查询 &ndash;&gt;-->
+    <!--  	<select id="multiSelect" resultMap="userResultMap">-->
+    <!--  		select * from user u left join address a on u.id = a.uid-->
+    <!--  							left join wife w on u.id = w.uid-->
+    <!--  			<where>-->
+    <!--  				<if test="id!=null">and u.id like CONCAT('%',#{id},'%')</if>-->
+    <!--				<if test="username!=null">and u.username like CONCAT('%',#{username},'%')</if>-->
+    <!--				<if test="password!=null">and u.password like CONCAT('%',#{password},'%')</if>-->
+    <!--				<if test="wifeName!=null">and w.name=#{wifeName}</if>-->
+    <!--			</where>-->
+    <!--  	</select>-->
+    <!--	-->
+    <!-- 添加User，参数为User对象，属性值为null时会置空 -->
+    <insert id="saveUser" parameterType="User">
+  		insert into user (id,username,password,birthday,up_path) values (#{id},#{username},#{password},#{birthday},#{upPath})
+  	</insert>
+
+    <!-- 更新User，有变化的值才会更新，置null的值不会更新 -->
+    <update id="updateUser" parameterType="User">
+        update user
+        <set>
+            <if test="username!=null">username=#{username},</if>
+            <if test="password!=null">password=#{password},</if>
+            <if test="birthday!=null">birthday=#{birthday},</if>
+            <if test="upPath!=null">up_path=#{upPath},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 删除User，根据id或者名字 -->
+    <delete id="deleteUser" parameterType="User">
+        delete from user
+        <where>
+            <if test="id!=null">and id=#{id}</if>
+            <if test="username!=null">and username=#{username}</if>
+        </where>
+    </delete>
+
+</mapper>

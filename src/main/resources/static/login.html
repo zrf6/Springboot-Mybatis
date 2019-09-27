@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+<form id="frm">
+    name:<input name=username value=""/>
+    password:<input name="password" value=""/>
+    <input type="button" value="登陆" id="commit"/>
+</form>
+
+<script src="/js/jquery-1.11.3.min.js"></script>
+<script>
+    $(function () {
+        $("#commit").click(function () {
+            var da = $("#frm").serialize();
+            $.ajax({
+                type: "get",
+                data: da,
+                url: "login",
+                dataType: "text",
+                success: function (data) {
+                    if (data == "success") {
+                        window.location.href = "index1.html";
+                    } else {
+                        alert("登陆失败");
+                        window.location.reload();
+                    }
+                }
+            })
+        })
+    })
+
+</script>
+
+
+</body>
+</html>

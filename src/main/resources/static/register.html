@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+<form id="frm">
+    <input name=username/>
+    <input name="password"/>
+    <input name="birthday"/>
+    <input name="upload" type="file"/>
+    <input type="button" value="注册" id="commit"/>
+</form>
+
+<script src="/js/jquery-1.11.3.min.js"></script>
+<script>
+    $(function () {
+        $("#commit").click(function () {
+            // var da = $("#frm").serialize();
+            var da = new FormData(document.getElementById("frm"));
+            alert(da);
+            $.ajax({
+                type: "post",
+                data: da,
+                url: "addUser",
+                dataType: "text",
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    alert(data);
+                    if (data == "success") {
+                        window.location.href = "login.html";
+                    } else {
+                        alert("注册失败");
+                        window.location.reload();
+                    }
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>

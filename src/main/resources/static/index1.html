@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <style type="text/css">
+        img {
+            height: 100px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="showData">
+
+</div>
+
+<script type="text/javascript">
+    <!-- 查询所有的ajax请求,将查询结果渲染到网页上 -->
+    var index = $(function () {
+        $.ajax({
+            type: "GET",
+            url: "selectAll",
+            dataType: "json",
+            success: function (data) {
+                for (var i in data) {
+                    $("#showData").append("<form action='updateUser' method='post' enctype='multipart/form-data'>" +
+                        "<input style='display:none' name='id' value=" + data[i].id + " />&nbsp" +
+                        "用户名：<input name='username' value=" + data[i].username + " />&nbsp" +
+                        "密码：<input name='password' value=" + data[i].password + " />&nbsp" +
+                        "生日：<input name='birthday' value=" + data[i].birthday + " />&nbsp" +
+                        "头像：<img src=" + data[i].up_path + " />&nbsp" +
+                        "图片：<input name='upload' type='file' value='修改头像' />&nbsp" +
+                        "<input class='updateBtn' type='submit' value='修改'>&nbsp" +
+                        "<input class='deleteBtn' type='button' value='删除'> <br /><br /><form>"
+                    );
+                }
+                var list = document.getElementsByTagName("form");
+                for (var i in list) {
+                    list[i].action = "updateUser";
+                }
+            }
+        })
+    });
+
+    //删除信息
+    $("body").on("click", ".deleteBtn", function () {
+        var form = $(this).parent()[0];
+        var da = $(this).parent().serialize();
+        $.ajax({
+            type: "GET",
+            url: "deleteUser",
+            data: da,
+            async: true,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data == "success") {
+                    alert("删除成功");
+                } else {
+                    alert("删除失败");
+                }
+                window.location.reload();
+            }
+        })
+    });
+
+    //修改信息
+    /* $("body").on("click", ".updateBt", function(){
+           var form = $(this).parent()[0];
+//				updata = decodeURIComponent(form,true);
+           var formData = new FormData(form);
+//				alert(formData);
+//				alert(updata);
+           $.ajax({
+               type:"POST",
+               url:"update",
+               data:formData,
+               async:true,
+               processData: false,
+               contentType: false,
+               dataType:"json",
+               success:function(data){
+                   alert(data);
+               }
+           })
+       });   */
+
+</script>
+
+
+</body>
+</html>
